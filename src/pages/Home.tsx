@@ -1,20 +1,13 @@
-import reactLogo from "../assets/react.svg";
-import logo2 from "../assets/logo2.svg";
-import { ReactSVG } from "react-svg";
 import TopNav from "../components/TopNav";
-import { useState } from "react";
-import Typewriter from "typewriter-effect";
+// import { useState } from "react";
+// import Typewriter from "typewriter-effect";
 import FuzzyText from "../components/FuzzyText";
 import Noise from "../components/Noise";
-import ASCIIText from "../components/ASCIIText";
-import { GiMountainClimbing, GiWinchesterRifle } from "react-icons/gi";
-import { FaPersonBiking, FaPersonHiking } from "react-icons/fa6";
-import { PiCampfireBold, PiFishSimpleFill } from "react-icons/pi";
-import CircularGallery from "../components/CircularGallery";
+
 import FadeContent from "../components/FadeContent";
 
 function Home() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
   const items = [
     {

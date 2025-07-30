@@ -1,5 +1,5 @@
 import FadeContent from "../components/FadeContent";
-import FuzzyText from "../components/FuzzyText";
+// import FuzzyText from "../components/FuzzyText";
 import TopNav from "../components/TopNav";
 import Cubes from "./Cubes";
 

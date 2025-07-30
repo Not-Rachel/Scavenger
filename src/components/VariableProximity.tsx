@@ -3,9 +3,9 @@ import {
   useMemo,
   useRef,
   useEffect,
-  MutableRefObject,
-  CSSProperties,
-  HTMLAttributes,
+  type MutableRefObject,
+  type CSSProperties,
+  type HTMLAttributes,
 } from "react";
 import { motion } from "framer-motion";
 
