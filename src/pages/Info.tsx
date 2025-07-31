@@ -1,6 +1,6 @@
 import FadeContent from "../components/FadeContent";
 // import FuzzyText from "../components/FuzzyText";
-import TopNav from "../components/TopNav";
+import TopNav from "../components/ScavNav";
 import Cubes from "./Cubes";
 
 function Info() {

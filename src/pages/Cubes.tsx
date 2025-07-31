@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import FadeContent from "../components/FadeContent";
-import TopNav from "../components/TopNav";
+import TopNav from "../components/ScavNav";
 import {
   createVertexBuffer,
   createProgram,
@@ -30,8 +30,14 @@ function Cubes() {
   let viewProjection = mat4.create();
 
   const [errorText, setErrorText] = useState<string | null>(null);
-  const rotateX = useRef(30);
-  const rotateY = useRef(10);
+
+  const [displayRotation, setDisplayRotation] = useState({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
+  const rotateX = useRef(0);
+  const rotateY = useRef(0);
   const update = useRef(true);
 
   const [previousTime, setPreviousTime] = useState(0);
@@ -195,6 +201,8 @@ function Cubes() {
         const cameraY = radius * Math.cos(phi);
         const cameraZ = radius * Math.sin(phi) * Math.sin(theta);
 
+        setDisplayRotation({ x: cameraX, y: cameraY, z: cameraZ });
+
         console.log(cameraX, cameraY, cameraZ);
         // console.log(rotateX.current, rotateY.current);
 
@@ -264,7 +272,8 @@ function Cubes() {
 
       <div className=" absolute border-spacing-2 border-1 left-0 top-0 border-white m-2 p-2 text-white ">
         <p>
-          {rotateX.current} , {rotateY.current}
+          {displayRotation.x.toFixed(2)} , {displayRotation.y.toFixed(2)} ,{" "}
+          {displayRotation.z.toFixed(2)}
         </p>
       </div>
 

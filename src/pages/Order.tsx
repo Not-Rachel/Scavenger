@@ -1,4 +1,4 @@
-import TopNav from "../components/TopNav";
+import TopNav from "../components/ScavNav";
 
 function Order() {
   return (

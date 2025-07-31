@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import FadeContent from "../components/FadeContent";
-import TopNav from "../components/TopNav";
+import TopNav from "../components/ScavNav";
 import { ReactSVG } from "react-svg";
 import dino from "../assets/chrome_dino.svg";
 import "./Dino.css";
@@ -42,7 +42,6 @@ function Game() {
 
   return (
     <>
-      <TopNav></TopNav>
       <FadeContent
         blur={true}
         duration={100}

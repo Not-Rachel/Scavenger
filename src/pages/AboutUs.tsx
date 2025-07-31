@@ -1,5 +1,5 @@
 import FadeContent from "../components/FadeContent";
-import TopNav from "../components/TopNav";
+import TopNav from "../components/ScavNav";
 
 function AboutUs() {
   return (
