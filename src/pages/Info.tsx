@@ -13,7 +13,7 @@ function Info() {
         easing="ease-out"
         initialOpacity={0}
       >
-        <section className="flex h-[200vh] bg-[url('assets/deer.jpg')] bg-contain [box-shadow:inset_0_0_1000px_rgba(0,0,0,0.7)]">
+        <section className="flex h-[100vh] bg-[url('assets/deer.jpg')] bg-cover [box-shadow:inset_0_0_1000px_rgba(0,0,0,0.7)]">
           <Cubes></Cubes>
 
           <div className="w-full mt-8 mx-auto flex flex-col items-center text-left text-white [text-shadow:0_0_20px_black]">

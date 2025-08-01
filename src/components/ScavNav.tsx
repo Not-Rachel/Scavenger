@@ -26,12 +26,6 @@ function TopNav() {
           <Container onClick={() => navigate("/scavenger/info")}>
             INFO
           </Container>
-          <Container
-            className="whitespace-nowrap w-fit"
-            onClick={() => navigate("/scavenger/order")}
-          >
-            SIGN IN
-          </Container>
 
           {/* <Container
             className="whitespace-nowrap w-fit"
@@ -42,6 +36,13 @@ function TopNav() {
         </div>
 
         <div className="mx-4 flex flex-row items-center gap-4">
+          <Container
+            className="whitespace-nowrap w-fit"
+            onClick={() => navigate("/scavenger/order")}
+          >
+            SIGN IN
+          </Container>
+
           <Container
             className="whitespace-nowrap w-fit"
             onClick={() => navigate("/game")}

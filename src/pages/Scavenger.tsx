@@ -5,6 +5,7 @@ import FuzzyText from "../components/FuzzyText";
 import Noise from "../components/Noise";
 
 import FadeContent from "../components/FadeContent";
+import Product from "../components/Product";
 
 function Home() {
   // const [count, setCount] = useState(0);
@@ -46,7 +47,7 @@ function Home() {
         easing="ease-out"
         initialOpacity={0}
       >
-        <section className="flex h-[200vh] bg-[url('assets/woof.jpg')] bg-contain [box-shadow:inset_0_0_1000px_rgba(0,0,0,0.7)]">
+        <section className="flex h-[100vh] bg-[url('assets/woof.jpg')] bg-cover [box-shadow:inset_0_0_1000px_rgba(0,0,0,0.7)]">
           <Noise
             patternSize={900}
             patternScaleX={4}
@@ -83,9 +84,18 @@ function Home() {
               }}
             /> */}
             </div>
-            <p className="font-bold text-[24px] max-w-[550px] my-[15px] tracking-[4px] [text-shadow:0_0_5px_black]">
+            <h2 className="font-bold text-[24px] max-w-[550px] my-[15px] tracking-[4px] [text-shadow:0_0_5px_black]">
               Find top of the line gear for hiking, biking, camping and more...
-            </p>
+            </h2>
+
+            <Product
+              id={1}
+              name={"Test Product"}
+              imgPath={"/"}
+              imgURL={"https://not-rachel.info"}
+              description={"Sample"}
+            ></Product>
+
             {/* <div className="h-100 w-full">
               <CircularGallery
                 bend={-3}
