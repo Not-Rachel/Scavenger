@@ -15,7 +15,11 @@ import {
 } from "./geometry";
 import { glMatrix, mat4, vec3 } from "gl-matrix";
 
-function Cubes() {
+interface CubeType {
+  spin: boolean;
+}
+
+function Cubes({ spin }: CubeType) {
   const errorRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -179,36 +183,41 @@ function Cubes() {
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.useProgram(cubeProgram);
 
-    // setPreviousTime(performance.now);
-
+    if (spin) {
+      setPreviousTime(globalThis.performance.now());
+    }
     let rotate = 0;
 
     const frame = function () {
-      if (update.current) {
+      if (true) {
         update.current = false;
 
-        // const currentTime = performance.now();
-        // const dt = (currentTime - previousTime) / 1000;
-        // setPreviousTime(currentTime);
+        // if (spin) {
+        const currentTime = globalThis.performance.now();
+        const dt = (currentTime - previousTime) / 1000;
+        setPreviousTime(currentTime);
+        // }
 
-        // rotate += dt * glMatrix.toRadian(10);
         const toRad = (deg: number) => deg * (Math.PI / 180);
+        rotate += toRad(1);
+
         const radius = 5;
-        const theta = toRad(rotateX.current); // horizontal angle
-        const phi = toRad(rotateY.current); // vertical angle
+        const theta = rotate % (2 * Math.PI); // horizontal angle
+        const phi = toRad(50); // vertical angle
 
         const cameraX = radius * Math.sin(phi) * Math.cos(theta);
         const cameraY = radius * Math.cos(phi);
         const cameraZ = radius * Math.sin(phi) * Math.sin(theta);
 
-        setDisplayRotation({ x: cameraX, y: cameraY, z: cameraZ });
+        // setDisplayRotation({ x: cameraX, y: cameraY, z: cameraZ });
 
-        console.log(cameraX, cameraY, cameraZ);
+        console.log(cameraX, cameraY, cameraZ, rotate);
         // console.log(rotateX.current, rotateY.current);
 
         mat4.lookAt(
           view,
           vec3.fromValues(cameraX, cameraY, cameraZ),
+          // vec3.fromValues(rotate, 0, 0),
           vec3.fromValues(0, 0, 0),
           vec3.fromValues(0, 1, 0)
         );
@@ -249,7 +258,7 @@ function Cubes() {
   }, []);
 
   return (
-    <div className="relative w-full h-[100vh] border-1">
+    <div className="relative w-full h-full border-1">
       {/* <TopNav></TopNav>
       <FadeContent
         blur={true}
@@ -270,12 +279,12 @@ function Cubes() {
         </div>
       )}
 
-      <div className=" absolute border-spacing-2 border-1 left-0 top-0 border-white m-2 p-2 text-white ">
+      {/* <div className=" absolute border-spacing-2 border-1 left-0 top-0 border-white m-2 p-2 text-white ">
         <p>
           {displayRotation.x.toFixed(2)} , {displayRotation.y.toFixed(2)} ,{" "}
           {displayRotation.z.toFixed(2)}
         </p>
-      </div>
+      </div> */}
 
       {/* <table className=" border-separate  border-spacing-2 border-1 absolute left-0 top-0 border-white m-2 text-white ">
           <tbody>
@@ -299,7 +308,7 @@ function Cubes() {
       <canvas
         ref={canvasRef}
         id="demo-canvas"
-        className="h-[100vh] w-[100%] border-2 border-white"
+        className="h-[100%] w-[100%] border-2 border-white"
       ></canvas>
       {/* </FadeContent> */}
     </div>

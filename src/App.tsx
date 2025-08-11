@@ -13,7 +13,7 @@ import AboutUs from "./pages/AboutUs";
 import ClickSpark from "./components/ClickSpark";
 import Game from "./pages/Game";
 import Cubes from "./pages/Cubes";
-import Home from "./pages/Home";
+import Home from "./landing/Home";
 
 function App() {
   // const navigate = useNavigate();

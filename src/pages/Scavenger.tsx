@@ -6,6 +6,7 @@ import Noise from "../components/Noise";
 
 import FadeContent from "../components/FadeContent";
 import Product from "../components/Product";
+import ThreeModel from "../components/ThreeModel";
 
 function Home() {
   // const [count, setCount] = useState(0);
@@ -40,22 +41,20 @@ function Home() {
   return (
     <>
       <TopNav></TopNav>
-
+      <Noise
+        patternSize={900}
+        patternScaleX={4}
+        patternScaleY={4}
+        patternRefreshInterval={2}
+        patternAlpha={12}
+      />
       <FadeContent
         blur={true}
         duration={300}
         easing="ease-out"
         initialOpacity={0}
       >
-        <section className="flex h-[100vh] bg-[url('assets/woof.jpg')] bg-cover [box-shadow:inset_0_0_1000px_rgba(0,0,0,0.7)]">
-          <Noise
-            patternSize={900}
-            patternScaleX={4}
-            patternScaleY={4}
-            patternRefreshInterval={2}
-            patternAlpha={12}
-          />
-
+        <section className="flex h-[100vh] bg-[linear-gradient(to_bottom,rgba(0,0,0,0)_70%,rgba(0,0,0,1)_100%),url('assets/woof.jpg')] bg-cover bg-no-repeat">
           <div className="w-full mt-8 mx-auto flex flex-col items-center text-center text-white [text-shadow:0_0_20px_black]">
             <FuzzyText
               baseIntensity={0.1}
@@ -107,6 +106,19 @@ function Home() {
               />
             </div> */}
           </div>
+        </section>
+        <section className="border-1 border-red-500 flex flex-col w-[100%] h-auto bg-black [box-shadow:inset_0_0_1000px_rgba(0,0,0,0.7)] justify-left">
+          <div className="flex text-white m-4">
+            <ThreeModel></ThreeModel>
+            {/* <div className="p-4">
+              <h1 className="font-bold tracking-widest text-xl">
+                Product Name
+              </h1>
+              <p>Information about the model</p>
+            </div> */}
+          </div>
+          {/* <ThreeModel></ThreeModel>
+          <ThreeModel></ThreeModel> */}
         </section>
       </FadeContent>
     </>
