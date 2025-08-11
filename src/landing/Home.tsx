@@ -35,7 +35,7 @@ function Home() {
             <ReactSVG src={scavLogo} className="text-amber-50 w-21" />
           </a>
           <a href="/scavenger" target="_blank" className={container}>
-            <Cubes spin={true}></Cubes>
+            <Cubes></Cubes>
           </a>
           <a href="/scavenger" target="_blank" className={container}>
             <ReactSVG src={scavLogo} className="text-amber-50 w-21" />

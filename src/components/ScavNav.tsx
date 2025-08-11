@@ -26,17 +26,10 @@ function TopNav() {
           <Container onClick={() => navigate("/scavenger/info")}>
             INFO
           </Container>
-
-          {/* <Container
-            className="whitespace-nowrap w-fit"
-            onClick={() => navigate("/cubes")}
-          >
-            WebGL DEMO
-          </Container>  */}
         </div>
 
         <div className="mx-4 flex flex-row items-center gap-4">
-          <Container
+          {/* <Container
             className="whitespace-nowrap w-fit"
             onClick={() => navigate("/scavenger/order")}
           >
@@ -48,9 +41,9 @@ function TopNav() {
             onClick={() => navigate("/game")}
           >
             CART
-          </Container>
+          </Container> */}
           <a href="https://react.dev" target="_blank">
-            <ReactSVG src={logo} className="text-amber-50 w-48" />
+            <ReactSVG src={logo} className="text-amber-50 w-36" />
           </a>
         </div>
       </Navbar>

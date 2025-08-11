@@ -14,7 +14,7 @@ import ClickSpark from "./components/ClickSpark";
 import Game from "./pages/Game";
 import Cubes from "./pages/Cubes";
 import Home from "./landing/Home";
-
+import ProductPage from "./pages/ProductPage.tsx";
 function App() {
   // const navigate = useNavigate();
 
@@ -39,8 +39,8 @@ function App() {
             <Route path="/scavenger/info" element={<Info />} />
             <Route path="/scavenger/about" element={<AboutUs />} />
             <Route path="/scavenger/order" element={<Order />} />
+            <Route path="/scavenger/product" element={<ProductPage />} />
             <Route path="/game" element={<Game />} />
-            <Route path="/cubes" element={<Cubes />} />
           </Routes>
         </Router>
       </ClickSpark>

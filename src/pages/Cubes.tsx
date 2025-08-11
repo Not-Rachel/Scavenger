@@ -15,11 +15,7 @@ import {
 } from "./geometry";
 import { glMatrix, mat4, vec3 } from "gl-matrix";
 
-interface CubeType {
-  spin: boolean;
-}
-
-function Cubes({ spin }: CubeType) {
+function Cubes() {
   const errorRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -183,9 +179,7 @@ function Cubes({ spin }: CubeType) {
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.useProgram(cubeProgram);
 
-    if (spin) {
-      setPreviousTime(globalThis.performance.now());
-    }
+    setPreviousTime(globalThis.performance.now());
     let rotate = 0;
 
     const frame = function () {

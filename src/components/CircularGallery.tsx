@@ -8,6 +8,7 @@ import {
   Transform,
 } from "ogl";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 type GL = Renderer["gl"];
 
@@ -162,6 +163,7 @@ interface MediaProps {
   geometry: Plane;
   gl: GL;
   image: string;
+  url?: string;
   index: number;
   length: number;
   renderer: Renderer;
@@ -180,6 +182,7 @@ class Media {
   geometry: Plane;
   gl: GL;
   image: string;
+  url?: string = "/";
   index: number;
   length: number;
   renderer: Renderer;
@@ -207,6 +210,7 @@ class Media {
     geometry,
     gl,
     image,
+    url,
     index,
     length,
     renderer,
@@ -222,6 +226,7 @@ class Media {
     this.geometry = geometry;
     this.gl = gl;
     this.image = image;
+    this.url = url;
     this.index = index;
     this.length = length;
     this.renderer = renderer;
@@ -320,6 +325,7 @@ class Media {
       program: this.program,
     });
     this.plane.setParent(this.scene);
+    // this.mesh = this.plane;
   }
 
   createTitle() {
@@ -410,7 +416,7 @@ class Media {
 }
 
 interface AppConfig {
-  items?: { image: string; text: string }[];
+  items?: { image: string; text: string; url?: string }[];
   bend?: number;
   textColor?: string;
   borderRadius?: number;
@@ -436,7 +442,7 @@ class App {
   scene!: Transform;
   planeGeometry!: Plane;
   medias: Media[] = [];
-  mediasImages: { image: string; text: string }[] = [];
+  mediasImages: { image: string; text: string; url?: string }[] = [];
   screen!: { width: number; height: number };
   viewport!: { width: number; height: number };
   raf: number = 0;
@@ -445,7 +451,7 @@ class App {
   boundOnWheel!: (e: Event) => void;
   boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
   boundOnTouchMove!: (e: MouseEvent | TouchEvent) => void;
-  boundOnTouchUp!: () => void;
+  boundOnTouchUp!: (e: MouseEvent | TouchEvent) => void;
 
   isDown: boolean = false;
   start: number = 0;
@@ -502,7 +508,7 @@ class App {
   }
 
   createMedias(
-    items: { image: string; text: string }[] | undefined,
+    items: { image: string; text: string; url?: string }[] | undefined,
     bend: number = 1,
     textColor: string,
     borderRadius: number,
@@ -561,10 +567,11 @@ class App {
     const galleryItems = items && items.length ? items : defaultItems;
     this.mediasImages = galleryItems.concat(galleryItems);
     this.medias = this.mediasImages.map((data, index) => {
-      return new Media({
+      const media = new Media({
         geometry: this.planeGeometry,
         gl: this.gl,
         image: data.image,
+        url: data.url,
         index,
         length: this.mediasImages.length,
         renderer: this.renderer,
@@ -577,10 +584,17 @@ class App {
         borderRadius,
         font,
       });
+      if (data.url) {
+      }
+      return media;
     });
   }
 
   onTouchDown(e: MouseEvent | TouchEvent) {
+    // Do not allow scroll outside canvas
+    const target = e.target as HTMLElement;
+    if (target !== this.renderer.gl.canvas) return;
+
     this.isDown = true;
     this.scroll.position = this.scroll.current;
     this.start = "touches" in e ? e.touches[0].clientX : e.clientX;
@@ -593,9 +607,34 @@ class App {
     this.scroll.target = (this.scroll.position ?? 0) + distance;
   }
 
-  onTouchUp() {
+  onTouchUp(e: MouseEvent | TouchEvent) {
     this.isDown = false;
+    const target = e.target as HTMLElement;
+    if (target !== this.renderer.gl.canvas) return;
+    // const x = "touches" in e ? e.touches[0].clientX : e.clientX;
+
+    // const distance = this.start - window.innerWidth / 2;
+    // console.log("up", this.start - window.innerWidth / 2, distance);
+
+    // this.scroll.target = (this.scroll.position ?? 0) + distance;
+
     this.onCheck();
+
+    if (!this.medias || !this.medias[0]) return;
+    const width = this.medias[0].width;
+    const itemIndex = Math.round(Math.abs(this.scroll.target) / width);
+
+    const clickX = this.start + (this.scroll.current ?? 0);
+    const clickIndex = Math.round(
+      (clickX - window.innerWidth / 2) / width / width + itemIndex
+    );
+
+    const index = Math.abs(clickIndex);
+    console.log(this.medias[index]);
+    const media = this.medias[index];
+    if (media && media.url) {
+      window.open(media.url);
+    }
   }
 
   onWheel(e: Event) {
@@ -692,7 +731,7 @@ class App {
 }
 
 interface CircularGalleryProps {
-  items?: { image: string; text: string }[];
+  items?: { image: string; text: string; url?: string }[];
   bend?: number;
   textColor?: string;
   borderRadius?: number;
@@ -710,6 +749,8 @@ export default function CircularGallery({
   scrollSpeed = 2,
   scrollEase = 0.05,
 }: CircularGalleryProps) {
+  const navigate = useNavigate();
+
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!containerRef.current) return;
