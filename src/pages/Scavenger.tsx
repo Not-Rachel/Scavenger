@@ -18,7 +18,7 @@ import cordImg from "../assets/product-images/cord.jpeg";
 import toteImg from "../assets/product-images/tote.jpeg";
 import fireImg from "../assets/product-images/fire_starter.jpeg";
 import { motion } from "motion/react";
-import { use, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import NotateText from "../components/NotateText";
 import { useLocation, useNavigate } from "react-router-dom";
 import NoteBook from "../components/Notebook";
@@ -28,8 +28,7 @@ function Home() {
   // const [count, setCount] = useState(0);
   const images = import.meta.glob("../assets/product-images/*.{jpg,jpeg,png}");
   const [viewItem, setViewItem] = useState<boolean>(false);
-  const [underlineAnimation, setUnderlineAnimation] = useState<boolean>(false);
-  const [currentItem, setCurrentItem] = useState<number>(1);
+  const [currentItem, setCurrentItem] = useState<number>(0);
 
   const items = [
     {
@@ -75,6 +74,7 @@ function Home() {
       model: null,
     },
   ];
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const openMap = searchParams.get("products") === "true";
@@ -87,11 +87,25 @@ function Home() {
   }
 
   function nextItem() {
+    console.log((currentItem + 1) % items.length);
+
     setCurrentItem((currentItem + 1) % items.length);
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key == "ArrowRight") {
+      setCurrentItem((currentItem + 1) % items.length);
+    } else if (e.key == "ArrowLeft") {
+      setCurrentItem((currentItem - 1 + items.length) % items.length);
+    }
+  }
+
   return (
-    <div className="bg-black snap-mandatory snap-y overflow-y-scroll h-[100vh] flex flex-col no-scrollbar">
+    <div
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      className="bg-black snap-mandatory snap-y overflow-y-scroll h-[100vh] flex flex-col no-scrollbar"
+    >
       <TopNav></TopNav>
       <Noise
         patternSize={900}
@@ -144,32 +158,39 @@ function Home() {
 
         <section className="bg-black h-screen snap-start scroll-mt-0 flex items-center justify-center ">
           {/* {viewItem && ( */}
-          {items[currentItem].model && (
-            <motion.div
-              onDoubleClick={() => setViewItem(false)}
-              className="opacity-10 absolute w-full h-screen flex flex-col items-center justify-center pointer-events-auto"
-              initial={{ opacity: 0 }}
-              style={{
-                zIndex: viewItem ? 99 : 1,
-                pointerEvents: viewItem ? "auto" : "none",
-              }}
-              animate={viewItem ? { opacity: 1.0 } : {}}
-            >
-              <ThreeModel modelSource={items[currentItem].model} scale={1.8} />
-              <div
-                onClick={() => setViewItem(false)}
-                className="font-[Daubmark] text-3xl mb-8 border-3 border-white border-dotted rounded-sm text-yellow-100 p-4"
-              >
-                <NotateText>RETURN</NotateText>
-              </div>
-            </motion.div>
+          {items[currentItem] && (
+            <>
+              {items[currentItem].model && viewItem && (
+                <motion.div
+                  onDoubleClick={() => setViewItem(false)}
+                  className="opacity-10 absolute w-full h-screen flex flex-col items-center justify-center pointer-events-auto"
+                  initial={{ opacity: 0 }}
+                  style={{
+                    zIndex: viewItem ? 99 : 1,
+                    pointerEvents: viewItem ? "auto" : "none",
+                  }}
+                  animate={viewItem ? { opacity: 1.0 } : {}}
+                >
+                  <ThreeModel
+                    modelSource={items[currentItem].model}
+                    scale={1.8}
+                  />
+                  <div
+                    onClick={() => setViewItem(false)}
+                    className="font-[Daubmark] text-3xl mb-8 border-3 border-white border-dotted rounded-sm text-yellow-100 p-4"
+                  >
+                    <NotateText>RETURN</NotateText>
+                  </div>
+                </motion.div>
+              )}
+              <NoteBook
+                viewItem={viewItem}
+                setViewItem={setViewItem}
+                setItem={nextItem}
+                item={items[currentItem]}
+              ></NoteBook>
+            </>
           )}
-          <NoteBook
-            viewItem={viewItem}
-            setViewItem={setViewItem}
-            setItem={nextItem}
-            item={items[currentItem]}
-          ></NoteBook>
         </section>
       </FadeContent>
       <p>

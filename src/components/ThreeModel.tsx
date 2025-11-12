@@ -98,14 +98,17 @@ function ThreeModel({
     window.addEventListener("resize", resize);
 
     const frame = () => {
+      if (!canvasRef.current) return;
+
       const currentTime = clock.getElapsedTime();
-      let delta = currentTime - previousTime;
       previousTime = currentTime;
       const scaled = Math.sin(currentTime * 0.8) * 0.07;
 
       if (model) model.position.y = scaled;
 
       blueLight.position.y = scaled;
+
+      // if (!canvasRef.current) return;
 
       renderer.setSize(
         canvasRef.current!.parentElement!.clientWidth,
@@ -126,6 +129,7 @@ function ThreeModel({
     if (!canvasRef.current || !renderer) return;
 
     const container = canvasRef.current.parentElement;
+    if (!container) return;
     const observer = new ResizeObserver(() => {
       const { width, height } = container!.getBoundingClientRect();
       renderer.setSize(width, height);
@@ -139,6 +143,8 @@ function ThreeModel({
   }, []);
 
   useEffect(() => {
+    if (!canvasRef.current) return;
+
     try {
       render();
     } catch (e) {

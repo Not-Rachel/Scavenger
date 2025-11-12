@@ -4,6 +4,7 @@ import NotateText from "./NotateText";
 import { motion } from "motion/react";
 
 import tote from "../assets/product-images/tote.jpeg";
+import { useEffect } from "react";
 interface NoteBookProps {
   viewItem: boolean;
   setViewItem: (value: boolean) => void;
@@ -11,9 +12,11 @@ interface NoteBookProps {
   item: any; // Replace `any` with a more specific type if you know the structure
 }
 
+// TODO: Add page flipping animation
+
 function NoteBook({ viewItem, setViewItem, setItem, item }: NoteBookProps) {
   return (
-    <>
+    <div>
       <motion.div
         className=" m-8 flex flex-row justify-end"
         animate={{
@@ -23,11 +26,6 @@ function NoteBook({ viewItem, setViewItem, setItem, item }: NoteBookProps) {
         initial={{ filter: "blur(0px)", opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        {/* <img
-                src={oldPaper}
-                alt="Old paper"
-                className="w-full h-full object-contain   "
-              /> */}
         <FadeIn>
           {(onLoad) => (
             <div className="relative h-auto w-[600px]  lg:w-[750px] m-8 flex z-20 lg:rotate-8 md:rotate-3  border-2  ">
@@ -50,7 +48,7 @@ function NoteBook({ viewItem, setViewItem, setItem, item }: NoteBookProps) {
                 </div>
                 <div className="font-[bleguk] relative w-[50%] m-4 inset-0 flex flex-col items-center text-orange-950 ">
                   <p>Click to view product</p>
-
+                  {/* TODO: Fix image loading */}
                   <motion.img
                     src={item.image}
                     alt=""
@@ -76,7 +74,7 @@ function NoteBook({ viewItem, setViewItem, setItem, item }: NoteBookProps) {
           )}
         </FadeIn>
       </motion.div>
-    </>
+    </div>
   );
 }
 

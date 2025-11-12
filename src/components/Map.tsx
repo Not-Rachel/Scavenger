@@ -27,7 +27,8 @@ function Map({ openMap, clickOpenMap }: MapProps) {
   // Source - https://stackoverflow.com/a
   // Posted by Akshay Kumar, modified by community. See post 'Timeline' for change history
   // Retrieved 2025-11-11, License - CC BY-SA 4.0
-  const navigate = useNavigate();
+
+  //TODO add Map elements such as Trees, Mountains, and "trails" to Product types
 
   return (
     <motion.div
@@ -55,16 +56,24 @@ function Map({ openMap, clickOpenMap }: MapProps) {
                 onClick={clickOpenMap}
                 className="h-[95vh] z-50 brightness-90 pointer-events-auto "
               />
-              <motion.img
-                src={oldParchmentRight}
-                alt={"Old Parchment Right"}
+              <motion.div
                 onLoad={onLoad}
                 initial={!openMap ? {} : { x: "650%" }}
                 animate={!openMap ? { x: 0 } : {}}
                 transition={{ duration: 4, type: "spring" }}
                 onClick={clickOpenMap}
-                className=" h-[95vh] z-60 brightness-90 pointer-events-auto "
-              />
+                className=" h-[95vh] z-60 brightness-90 pointer-events-auto flex justify-center items-center "
+              >
+                <h2 className="text-5xl absolute z-70 rotate-90 font-[Kashare] text-nowrap">
+                  {openMap ? "Close map" : "Open Map"}
+                </h2>
+                <img
+                  src={oldParchmentRight}
+                  alt={"Old Parchment Right"}
+                  onLoad={onLoad}
+                  className="w-full h-full brightness-70 "
+                />
+              </motion.div>
             </div>
             <motion.div
               ref={pageRef}
