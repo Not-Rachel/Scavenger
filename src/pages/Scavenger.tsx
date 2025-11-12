@@ -34,45 +34,45 @@ function Home() {
   const items = [
     {
       key: 0,
-      image: bagImg,
+      image: fireImg,
       name: "Multitool",
-      text: "Hiking",
+      text: "A compact, all-in-one toolset designed for hikers—includes knife, pliers, screwdriver, and more for quick fixes and outdoor tasks.",
       model: "/Multitool_fixed.glb",
     },
     {
       key: 1,
       image: bagImg,
       name: "Backpack",
+      text: "Durable hiking backpack with reinforced straps, multiple compartments, and weather-resistant fabric—perfect for long treks and gear organization.",
       model: "/betterbag.glb",
-      text: "Awsome bag for hiking",
     },
     {
       key: 2,
       image: balmImg,
       name: "Climbing Balm",
+      text: "Protective balm that soothes and strengthens skin for climbers—ideal for preventing tears and improving grip during rugged ascents.",
       model: null,
-      text: "Safety",
     },
     {
       key: 3,
       image: cordImg,
       name: "Coord",
-      text: "Camping",
+      text: "Heavy-duty camping cord for securing tents, hanging gear, or building shelters—lightweight, strong, and essential for outdoor setups.",
       model: null,
     },
     {
       key: 4,
       image: strawImg,
       name: "Filtered Straw",
+      text: "Portable water filtration straw that removes bacteria and debris—drink safely from rivers and streams while camping or hiking.",
       model: null,
-      text: "camping",
     },
     {
       key: 5,
       image: toteImg,
       name: "Hiking Tote",
+      text: "Spacious and rugged tote bag for carrying survival essentials, snacks, and trail gear—easy to pack and grab on the go.",
       model: null,
-      text: "Survival",
     },
   ];
   const location = useLocation();
@@ -84,6 +84,10 @@ function Home() {
     const newParams = new URLSearchParams(location.search);
     newParams.set("products", openMap ? "false" : "true");
     navigate(`/scavenger?${newParams.toString()}`);
+  }
+
+  function nextItem() {
+    setCurrentItem((currentItem + 1) % items.length);
   }
 
   return (
@@ -142,8 +146,8 @@ function Home() {
           {/* {viewItem && ( */}
           {items[currentItem].model && (
             <motion.div
-              onDoubleClick={() => setViewItem(!viewItem)}
-              className="opacity-10 absolute w-full h-screen flex items-center justify-center pointer-events-auto"
+              onDoubleClick={() => setViewItem(false)}
+              className="opacity-10 absolute w-full h-screen flex flex-col items-center justify-center pointer-events-auto"
               initial={{ opacity: 0 }}
               style={{
                 zIndex: viewItem ? 99 : 1,
@@ -152,12 +156,19 @@ function Home() {
               animate={viewItem ? { opacity: 1.0 } : {}}
             >
               <ThreeModel modelSource={items[currentItem].model} scale={1.8} />
+              <div
+                onClick={() => setViewItem(false)}
+                className="font-[Daubmark] text-3xl mb-8 border-3 border-white border-dotted rounded-sm text-yellow-100 p-4"
+              >
+                <NotateText>RETURN</NotateText>
+              </div>
             </motion.div>
           )}
           <NoteBook
             viewItem={viewItem}
             setViewItem={setViewItem}
-            item={items[0]}
+            setItem={nextItem}
+            item={items[currentItem]}
           ></NoteBook>
         </section>
       </FadeContent>
