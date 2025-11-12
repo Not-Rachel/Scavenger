@@ -1,9 +1,27 @@
+import { useState } from "react";
 import FadeContent from "../components/FadeContent";
 // import FuzzyText from "../components/FuzzyText";
 import TopNav from "../components/ScavNav";
-import Cubes from "./Cubes";
 
 function Info() {
+  const [formData, setFormData] = useState({
+    user: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+    // Add your submission logic here (e.g., API call)
+  };
+
   return (
     <>
       <TopNav></TopNav>
@@ -14,18 +32,42 @@ function Info() {
         initialOpacity={0}
       >
         <section className="flex h-[100vh] bg-[url('assets/deer.jpg')] bg-cover [box-shadow:inset_0_0_1000px_rgba(0,0,0,0.7)]">
-          <Cubes></Cubes>
+          <div className="font=[revolution] w-screen flex flex-col justify-center items-center text-white">
+            <form
+              onSubmit={handleSubmit}
+              className=" flex flex-col justify-center items-center gap-16"
+            >
+              <input
+                className="border-white border-2"
+                type="text"
+                name="user"
+                value={formData.user}
+                onChange={handleChange}
+                placeholder="USERNAME"
+              />
+              <input
+                className="border-white border-2"
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="EMAIL"
+              />
 
-          <div className="w-full mt-8 mx-auto flex flex-col items-center text-left text-white [text-shadow:0_0_20px_black]">
-            <p className="font-bold text-[24px] max-w-[1000px] my-[15px] tracking-[4px] [text-shadow:0_0_5px_black]">
-              This is a portfolio for a mock product designed by Obama's son,
-              Barack.
-            </p>
-            <p className="font-bold text-[24px] max-w-[1000px] my-[15px] tracking-[4px] [text-shadow:0_0_5px_black]">
-              Programmed by Squidward Tentacles using React.
-            </p>
-            <p>For business inqueries, contact yourMomsEmail@sugma.com</p>
-            <p>All rights reserved</p>
+              <input
+                className="border-white border-2"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="PASSWORD"
+              />
+              <input
+                type="submit"
+                value="Submit"
+                className="border-2 border-white"
+              />
+            </form>
           </div>
         </section>
       </FadeContent>

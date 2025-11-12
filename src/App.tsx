@@ -19,8 +19,7 @@ function App() {
 
   return (
     <>
-      <head></head>
-      <body className="bg-black">
+      <div className="bg-black">
         <ClickSpark
           sparkColor="#fff"
           sparkSize={10}
@@ -40,7 +39,7 @@ function App() {
             </Routes>
           </Router>
         </ClickSpark>
-      </body>
+      </div>
     </>
   );
 }

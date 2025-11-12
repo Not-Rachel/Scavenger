@@ -3,8 +3,15 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-function ThreeModel({ modelSource }: { modelSource: string }) {
+function ThreeModel({
+  modelSource,
+  scale,
+}: {
+  modelSource: string;
+  scale: number;
+}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 
   const scene: THREE.Scene = new THREE.Scene();
 
@@ -23,7 +30,8 @@ function ThreeModel({ modelSource }: { modelSource: string }) {
     modelSource,
     (gltf) => {
       model = gltf.scene;
-      model.scale.set(7.01, 7.01, 7.01);
+      model.scale.set(scale, scale, scale);
+      model.rotateY(110);
       model.castShadow = true;
       scene.add(model);
     },
@@ -62,6 +70,7 @@ function ThreeModel({ modelSource }: { modelSource: string }) {
       canvas: canvasRef.current,
       antialias: true,
     });
+    rendererRef.current = renderer;
     renderer.setClearColor(0xffffff, 0);
 
     console.log(
@@ -112,6 +121,24 @@ function ThreeModel({ modelSource }: { modelSource: string }) {
   }
 
   useEffect(() => {
+    const renderer = rendererRef.current;
+
+    if (!canvasRef.current || !renderer) return;
+
+    const container = canvasRef.current.parentElement;
+    const observer = new ResizeObserver(() => {
+      const { width, height } = container!.getBoundingClientRect();
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    });
+
+    observer.observe(container!);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     try {
       render();
     } catch (e) {
@@ -123,7 +150,7 @@ function ThreeModel({ modelSource }: { modelSource: string }) {
     <div className="w-full h-full max-w-screen overflow-hidden">
       <canvas
         ref={canvasRef}
-        className=" w-[100%] m-0 overflow-hidden "
+        className=" w-full h-full m-0 overflow-hidden "
       ></canvas>
     </div>
   );

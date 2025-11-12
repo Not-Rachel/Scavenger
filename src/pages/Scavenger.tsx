@@ -15,12 +15,13 @@ import allProductsImg from "../assets/product-images/all_together.png";
 import strawImg from "../assets/product-images/filter_straw.jpeg";
 import bagImg from "../assets/product-images/bag.jpeg";
 import cordImg from "../assets/product-images/cord.jpeg";
+import toteImg from "../assets/product-images/tote.jpeg";
 import fireImg from "../assets/product-images/fire_starter.jpeg";
-import oldBook from "../assets/old-book2.png";
 import { motion } from "motion/react";
 import { use, useState } from "react";
 import NotateText from "../components/NotateText";
 import { useLocation, useNavigate } from "react-router-dom";
+import NoteBook from "../components/Notebook";
 // import CircularText from "../components/CircularText";
 
 function Home() {
@@ -28,34 +29,51 @@ function Home() {
   const images = import.meta.glob("../assets/product-images/*.{jpg,jpeg,png}");
   const [viewItem, setViewItem] = useState<boolean>(false);
   const [underlineAnimation, setUnderlineAnimation] = useState<boolean>(false);
+  const [currentItem, setCurrentItem] = useState<number>(1);
+
   const items = [
     {
+      key: 0,
       image: bagImg,
+      name: "Multitool",
       text: "Hiking",
-      url: "/product",
+      model: "/Multitool_fixed.glb",
     },
     {
-      image: fireImg,
-      text: "Camping",
-      url: "/product",
+      key: 1,
+      image: bagImg,
+      name: "Backpack",
+      model: "/betterbag.glb",
+      text: "Awsome bag for hiking",
     },
-    // {
-    //   image: balmImg,
-    //   text: "Safety",
-    // },
     {
+      key: 2,
+      image: balmImg,
+      name: "Climbing Balm",
+      model: null,
+      text: "Safety",
+    },
+    {
+      key: 3,
       image: cordImg,
-      text: "Climbing",
+      name: "Coord",
+      text: "Camping",
+      model: null,
     },
     {
+      key: 4,
       image: strawImg,
-
-      text: "Backpacking",
+      name: "Filtered Straw",
+      model: null,
+      text: "camping",
     },
-    // {
-    //   image: toteImg,
-    //   text: "Survival",
-    // },
+    {
+      key: 5,
+      image: toteImg,
+      name: "Hiking Tote",
+      model: null,
+      text: "Survival",
+    },
   ];
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -117,84 +135,30 @@ function Home() {
             <div className="absolute z-40  ">
               <Map openMap={openMap} clickOpenMap={clickOpenMap}></Map>
             </div>
-
-            {/* <div className="h-[50vh] w-full">
-              <CircularGallery
-                bend={-4}
-                textColor="#ffffff"
-                borderRadius={0.05}
-                scrollEase={0.02}
-                items={items}
-                font="bolder 90px monospace"
-              />
-            </div> */}
           </div>
         </section>
 
         <section className="bg-black h-screen snap-start scroll-mt-0 flex items-center justify-center ">
-          <div
-            onDoubleClick={() => setViewItem(!viewItem)}
-            className={`absolute z-50 ${
-              viewItem ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <ThreeModel modelSource="/Multitool_fixed.glb" />
-          </div>
-          <motion.div
-            className=" m-8 flex flex-row justify-end"
-            animate={{
-              filter: viewItem ? "blur(3px)" : "blur(0px)",
-              opacity: viewItem ? 0.6 : 1.0,
-            }}
-            initial={{ filter: "blur(0px)", opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
-            {/* <img
-                src={oldPaper}
-                alt="Old paper"
-                className="w-full h-full object-contain   "
-              /> */}
-            <FadeIn>
-              {(onLoad) => (
-                <div className=" h-[90vh] m-8 flex z-20 lg:-rotate-5 ">
-                  <img
-                    src={oldBook}
-                    alt="Old book"
-                    className="w-full h-full object-contain bg-none "
-                    onLoad={onLoad}
-                  />
-
-                  <div className="absolute flex flex-row">
-                    <div className="w-[45%] opacity-85  inset-0 flex flex-col m-8 px-2  text-orange-950">
-                      <h1 className="font-[Kashare] text-5xl font-bold pb-8">
-                        Multitool
-                      </h1>
-                      <div className="text-2xl font-[revolution] font-bold">
-                        <p>
-                          Compact and indispensable Includes knife, pliers,
-                          screwdriver, flint, and kindling shaver. Ideal for
-                          gear repair, food prep, and campsite setup. Keep it
-                          accessible in your outer pocket or clipped to your
-                          belt.
-                        </p>
-                        <p className="my-4">
-                          In low light, feel for the textured grip to orient the
-                          blade safely. The rest of this text is just for show
-                        </p>
-                      </div>
-                    </div>
-                    <div className="w-[45%] opacity-85 justify-center items-center inset-0 flex flex-col   text-orange-950">
-                      <div className="font-[revolution] text-3xl font-bold hover:font-black">
-                        <a href="/">
-                          <NotateText>ADD TO CART</NotateText>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </FadeIn>
-          </motion.div>
+          {/* {viewItem && ( */}
+          {items[currentItem].model && (
+            <motion.div
+              onDoubleClick={() => setViewItem(!viewItem)}
+              className="opacity-10 absolute w-full h-screen flex items-center justify-center pointer-events-auto"
+              initial={{ opacity: 0 }}
+              style={{
+                zIndex: viewItem ? 99 : 1,
+                pointerEvents: viewItem ? "auto" : "none",
+              }}
+              animate={viewItem ? { opacity: 1.0 } : {}}
+            >
+              <ThreeModel modelSource={items[currentItem].model} scale={1.8} />
+            </motion.div>
+          )}
+          <NoteBook
+            viewItem={viewItem}
+            setViewItem={setViewItem}
+            item={items[0]}
+          ></NoteBook>
         </section>
       </FadeContent>
       <p>
