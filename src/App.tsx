@@ -12,7 +12,6 @@ import Info from "./pages/Info";
 import AboutUs from "./pages/AboutUs";
 import ClickSpark from "./components/ClickSpark";
 import Game from "./pages/Game";
-import Cubes from "./pages/Cubes";
 import Home from "./landing/Home";
 import ProductPage from "./pages/ProductPage.tsx";
 function App() {
@@ -20,30 +19,28 @@ function App() {
 
   return (
     <>
-      <head>
-        <title>Rachel Brinkman</title>
-        <link rel="icon" href="./assets/skull.ico" type="image/x-icon"></link>
-      </head>
-
-      <ClickSpark
-        sparkColor="#fff"
-        sparkSize={10}
-        sparkRadius={15}
-        sparkCount={8}
-        duration={400}
-      >
-        <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/scavenger" element={<Scavenger />} />
-            <Route path="/scavenger/info" element={<Info />} />
-            <Route path="/scavenger/about" element={<AboutUs />} />
-            <Route path="/scavenger/order" element={<Order />} />
-            <Route path="/scavenger/product" element={<ProductPage />} />
-            <Route path="/game" element={<Game />} />
-          </Routes>
-        </Router>
-      </ClickSpark>
+      <head></head>
+      <body className="bg-black">
+        <ClickSpark
+          sparkColor="#fff"
+          sparkSize={10}
+          sparkRadius={15}
+          sparkCount={8}
+          duration={400}
+        >
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/scavenger" element={<Scavenger />} />
+              <Route path="/scavenger/info" element={<Info />} />
+              <Route path="/scavenger/about" element={<AboutUs />} />
+              <Route path="/scavenger/order" element={<Order />} />
+              {/* <Route path="/scavenger/product" element={<ProductPage />} /> */}
+              <Route path="/game" element={<Game />} />
+            </Routes>
+          </Router>
+        </ClickSpark>
+      </body>
     </>
   );
 }

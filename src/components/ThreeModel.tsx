@@ -1,52 +1,41 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
-import { Pane } from "tweakpane";
-import forestFloor from "../textures/forest-floor-bl/forest_floor_albedo.png";
-function ThreeModel() {
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+function ThreeModel({ modelSource }: { modelSource: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Adding the scene
-  const pane = new Pane();
-
-  const textureLoader = new THREE.TextureLoader();
-
   const scene: THREE.Scene = new THREE.Scene();
-  const sphereGeometry = new THREE.SphereGeometry(1, 20, 20);
-  const groundGeometry = new THREE.CircleGeometry(3, 24);
 
-  const grassTexture = textureLoader.load(forestFloor);
-  grassTexture.repeat.set(1, 1);
-  grassTexture.wrapS = THREE.RepeatWrapping;
-  grassTexture.wrapT = THREE.RepeatWrapping;
+  const light = new THREE.SpotLight(0xffc963, 50);
+  const blueLight = new THREE.PointLight(0x33bbff, 40);
+  blueLight.position.set(5, 5, 0);
+  light.position.set(0, 4, 0);
+  light.castShadow = true;
+  blueLight.castShadow = true;
+  const ambLight = new THREE.AmbientLight(0xa8beff, 0.25);
 
-  const material = new THREE.MeshStandardMaterial({
-    // color: "red",
-    roughness: 0.1,
-    // metalness: 0.3,
-    map: grassTexture,
-  });
+  let model: THREE.Group | null = null;
+  const loader = new GLTFLoader();
 
-  console.log(grassTexture);
+  loader.load(
+    modelSource,
+    (gltf) => {
+      model = gltf.scene;
+      model.scale.set(7.01, 7.01, 7.01);
+      model.castShadow = true;
+      scene.add(model);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    (error) => {
+      console.log("Error loading GLTF:", error);
+    }
+  );
 
-  const light = new THREE.PointLight(0xffffff, 50);
-  const ambLight = new THREE.AmbientLight(0xffffff, 0.5);
-  light.position.set(2, 2, 2);
-
-  const mesh = new THREE.Mesh(sphereGeometry, material);
-  const mesh2 = new THREE.Mesh(sphereGeometry, material);
-  const groundMesh = new THREE.Mesh(groundGeometry, material);
-
-  mesh2.position.x = 2;
-  mesh2.scale.set(0.2, 0.2, 0.2);
-
-  groundMesh.position.y = -1.5;
-  groundMesh.rotateX(THREE.MathUtils.degToRad(-90));
-
-  scene.add(mesh, mesh2, groundMesh, light, ambLight);
-
-  const fog = new THREE.Fog(0x0, 1, 50);
-  scene.fog = fog;
+  scene.add(light, blueLight, ambLight);
 
   const camera = new THREE.PerspectiveCamera(
     35,
@@ -55,20 +44,9 @@ function ThreeModel() {
     100
   );
 
-  camera.position.z = 10;
+  camera.position.z = 7;
+  camera.position.y = 4;
   scene.add(camera);
-
-  const axesHelper = new THREE.AxesHelper(2);
-  mesh.add(axesHelper);
-  // cubeMesh.rotation.z = THREE.MathUtils.degToRad(30);
-
-  // scene.add(axesHelper);
-
-  function resize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-  }
-  window.addEventListener("resize", resize);
 
   function render() {
     if (!canvasRef.current) {
@@ -76,29 +54,54 @@ function ThreeModel() {
     }
     const controls = new OrbitControls(camera, canvasRef.current);
     controls.autoRotate = false;
+    controls.enablePan = true;
     controls.enableDamping = true;
-    controls.enableZoom = true;
-    controls.enablePan = false;
+    controls.enableZoom = false;
 
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
       antialias: true,
     });
+    renderer.setClearColor(0xffffff, 0);
+
+    console.log(
+      "Shader:",
+      document.getElementById("vertexshader")?.textContent
+    );
+
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const clock = new THREE.Clock();
     let previousTime = clock.getElapsedTime();
+
+    function resize() {
+      const container = canvasRef.current;
+      const { width, height } = container!.getBoundingClientRect();
+      renderer.setSize(width, height);
+
+      camera.aspect = width / height;
+      // camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener("resize", resize);
 
     const frame = () => {
       const currentTime = clock.getElapsedTime();
       let delta = currentTime - previousTime;
       previousTime = currentTime;
-      const scaled = Math.sin(currentTime * 0.7) * 0.05;
+      const scaled = Math.sin(currentTime * 0.8) * 0.07;
 
-      // cubeMesh.scale.set(scaled + 1, scaled + 1, scaled + 1);
-      mesh.position.y = scaled;
+      if (model) model.position.y = scaled;
 
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      blueLight.position.y = scaled;
+
+      renderer.setSize(
+        canvasRef.current!.parentElement!.clientWidth,
+        canvasRef.current!.parentElement!.clientHeight
+      );
       renderer.render(scene, camera);
       controls.update();
       window.requestAnimationFrame(frame);
@@ -116,14 +119,13 @@ function ThreeModel() {
     }
   }, []);
 
-  //   console.log("Camera", camera);
   return (
-    <>
+    <div className="w-full h-full max-w-screen overflow-hidden">
       <canvas
         ref={canvasRef}
-        className="border-2 border-white m-0 overflow-hidden"
+        className=" w-[100%] m-0 overflow-hidden "
       ></canvas>
-    </>
+    </div>
   );
 }
 

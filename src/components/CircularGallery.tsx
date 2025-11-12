@@ -455,6 +455,7 @@ class App {
 
   isDown: boolean = false;
   start: number = 0;
+  isMove!: boolean;
 
   constructor(
     container: HTMLElement,
@@ -601,7 +602,11 @@ class App {
   }
 
   onTouchMove(e: MouseEvent | TouchEvent) {
-    if (!this.isDown) return;
+    if (!this.isDown) {
+      this.isMove = false;
+      return;
+    }
+    this.isMove = true;
     const x = "touches" in e ? e.touches[0].clientX : e.clientX;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
     this.scroll.target = (this.scroll.position ?? 0) + distance;
@@ -609,6 +614,7 @@ class App {
 
   onTouchUp(e: MouseEvent | TouchEvent) {
     this.isDown = false;
+
     const target = e.target as HTMLElement;
     if (target !== this.renderer.gl.canvas) return;
     // const x = "touches" in e ? e.touches[0].clientX : e.clientX;
@@ -619,6 +625,10 @@ class App {
     // this.scroll.target = (this.scroll.position ?? 0) + distance;
 
     this.onCheck();
+    if (this.isMove) {
+      this.isMove = false;
+      return;
+    }
 
     if (!this.medias || !this.medias[0]) return;
     const width = this.medias[0].width;
@@ -633,7 +643,7 @@ class App {
     console.log(this.medias[index]);
     const media = this.medias[index];
     if (media && media.url) {
-      window.open(media.url);
+      window.location.href += media.url;
     }
   }
 
@@ -749,8 +759,6 @@ export default function CircularGallery({
   scrollSpeed = 2,
   scrollEase = 0.05,
 }: CircularGalleryProps) {
-  const navigate = useNavigate();
-
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!containerRef.current) return;

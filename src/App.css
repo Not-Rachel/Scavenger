@@ -1,13 +1,56 @@
 @import "tailwindcss";
 #root {
-  /* max-width: 1280px; */
   margin: 0 auto;
-  /* padding: 2rem; */
   background-color: black;
-  /* text-align: center; */
 }
 :global(.scav){
   background-color: black;
+}
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@font-face {
+  font-family: bleguk; 
+  src: url(assets/fonts/Bleguk-Demo.otf);  
+}
+@font-face {
+  font-family: revolution; 
+  src: url(assets/fonts/Children_of_the_revolution.ttf);  
+}
+@font-face {
+  font-family: santo; 
+  src: url(assets/fonts/SANTO___.TTF);  
+}
+@font-face {
+  font-family: vtks; 
+  src: url(assets/fonts/Vtks_Vinte_e_Cinco.ttf);  
+}
+@font-face {
+  font-family: EdSloppy; 
+  src: url(assets/fonts/zai_EdSloppyHandwritten.ttf);  
+}
+@font-face {
+  font-family: EdSimple; 
+  src: url(assets/fonts/zai_EdSloppySimple.ttf);  
+}
+@font-face {
+  font-family: Daubmark; 
+  src: url(assets/fonts/Daubmark.ttf);  
+}
+@font-face {
+  font-family: Caligraf; 
+  src: url(assets/fonts/Caligraf.ttf);  
+}
+@font-face {
+  font-family: Kashare; 
+  src: url(assets/fonts/Kashare.ttf);  
 }
 
 .hero{

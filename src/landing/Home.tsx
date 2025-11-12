@@ -4,7 +4,7 @@ import portrait from "../assets/rache2.jpg";
 import construction from "../assets/construction.gif";
 import { ReactSVG } from "react-svg";
 import scavLogo from "../assets/logo2.svg";
-import github from "../assets/github-mark-white.svg";
+import github from "../assets/github-mark/github-mark-white.svg";
 import Cubes from "../pages/Cubes";
 function Home() {
   const navigate = useNavigate();
@@ -34,10 +34,14 @@ function Home() {
           <a href="/scavenger" target="_blank" className={container}>
             <ReactSVG src={scavLogo} className="text-amber-50 w-21" />
           </a>
-          <a href="/scavenger" target="_blank" className={container}>
+          <a
+            href="../../../Graphics 2024/A7/project7.html"
+            target="_blank"
+            className={container}
+          >
             <Cubes></Cubes>
           </a>
-          <a href="/scavenger" target="_blank" className={container}>
+          <a href=".." target="_blank" className={container}>
             <ReactSVG src={scavLogo} className="text-amber-50 w-21" />
           </a>
           <a href="/scavenger" target="_blank" className={container}>
