@@ -42,37 +42,44 @@ function Map({ openMap, clickOpenMap }: MapProps) {
         {(onLoad) => (
           <div className="relative w-[100%] h-screen flex items-center ">
             <div
-              className={`absolute w-full top-0 z-60 flex flex-row justify-center items-centerborder-2 border-white ${
+              className={`absolute w-full top-0 z-60 flex flex-row justify-end items-center ${
                 openMap ? "pointer-events-none" : ""
               }`}
             >
-              <motion.img
-                src={oldParchmentLeft}
-                alt={"Old Parchment Left"}
-                onLoad={onLoad}
-                initial={!openMap ? {} : { x: "-650%" }}
-                animate={!openMap ? { x: 0 } : {}}
-                transition={{ duration: 4, type: "spring" }}
-                onClick={clickOpenMap}
-                className="h-[95vh] z-50 brightness-90 pointer-events-auto "
-              />
               <motion.div
                 onLoad={onLoad}
-                initial={!openMap ? {} : { x: "650%" }}
+                initial={!openMap ? {} : { x: "-90%" }}
                 animate={!openMap ? { x: 0 } : {}}
                 transition={{ duration: 4, type: "spring" }}
                 onClick={clickOpenMap}
-                className=" h-[95vh] z-60 brightness-90 pointer-events-auto flex justify-center items-center "
+                className="h-[95vh] w-1/2 z-50 flex justify-end brightness-90 pointer-events-auto  "
               >
-                <h2 className="text-5xl absolute z-70 rotate-90 font-[Kashare] text-nowrap">
-                  {openMap ? "Close map" : "Open Map"}
-                </h2>
                 <img
-                  src={oldParchmentRight}
-                  alt={"Old Parchment Right"}
+                  src={oldParchmentLeft}
+                  alt={"Old Parchment Left"}
                   onLoad={onLoad}
-                  className="w-full h-full brightness-70 "
+                  className=" h-full brightness-70  "
                 />
+              </motion.div>
+              <motion.div
+                onLoad={onLoad}
+                initial={!openMap ? {} : { x: "90%" }}
+                animate={!openMap ? { x: 0 } : {}}
+                transition={{ duration: 4, type: "spring" }}
+                onClick={clickOpenMap}
+                className=" h-[95vh] w-1/2 z-50 flex justify-start brightness-90 pointer-events-auto  "
+              >
+                <div className="relative h-full justify-center  flex items-center ">
+                  <h2 className="text-[7vh] absolute z-70 rotate-90 font-[Kashare] text-nowrap">
+                    {openMap ? "Close map" : "Open Map"}
+                  </h2>
+                  <img
+                    src={oldParchmentRight}
+                    alt={"Old Parchment Right"}
+                    onLoad={onLoad}
+                    className="h-full brightness-70 "
+                  />
+                </div>
               </motion.div>
             </div>
             <motion.div
@@ -81,7 +88,7 @@ function Map({ openMap, clickOpenMap }: MapProps) {
               animate={openMap ? { clipPath: "inset(0 0% 0 0%)" } : {}}
               transition={{ duration: 4, type: "spring" }}
               onLoad={onLoad}
-              className="relative pointer-events-auto z-50"
+              className="relative pointer-events-auto z-50 "
             >
               <img
                 src={oldParchment}
