@@ -22,10 +22,16 @@ import { use, useEffect, useRef, useState } from "react";
 import NotateText from "../components/NotateText";
 import { useLocation, useNavigate } from "react-router-dom";
 import NoteBook from "../components/Notebook";
+import { useAuth } from "../AuthContext";
 // import CircularText from "../components/CircularText";
 
 function Home() {
   // const [count, setCount] = useState(0);
+  const auth = useAuth();
+
+  if (auth === null || auth.isAuthorized === null) {
+    return <div>Loading...</div>;
+  }
   const images = import.meta.glob("../assets/product-images/*.{jpg,jpeg,png}");
   const [viewItem, setViewItem] = useState<boolean>(false);
   const [currentItem, setCurrentItem] = useState<number>(0);

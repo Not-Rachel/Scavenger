@@ -8,10 +8,17 @@ import { useNavigate } from "react-router-dom";
 import VariableProximity from "./VariableProximity";
 import { useRef } from "react";
 import NotateText from "./NotateText";
+import { useAuth } from "../AuthContext";
 
 function TopNav() {
   const navigate = useNavigate();
   const containerRef = useRef(null);
+
+  const auth = useAuth();
+
+  if (auth === null || auth.isAuthorized === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -26,9 +33,15 @@ function TopNav() {
           >
             <NotateText>INFO</NotateText>
           </Container>
-          <Container className="" onClick={() => navigate("/scavenger/info")}>
-            <NotateText>LOGIN</NotateText>
-          </Container>
+          {auth.isAuthorized ? (
+            <Container onClick={() => navigate("/scavenger/profile")}>
+              <NotateText>Profile</NotateText>
+            </Container>
+          ) : (
+            <Container onClick={() => navigate("/scavenger/login")}>
+              <NotateText>LOGIN</NotateText>
+            </Container>
+          )}
         </div>
 
         <a href="https://preydrivedesign.crd.co/" target="_blank">

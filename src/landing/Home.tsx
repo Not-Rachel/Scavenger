@@ -62,7 +62,7 @@ function Home() {
           </a>
           <a href=".." target="_blank" className={container}>
             <h1 className="text-amber-50 text-3xl  w-24 md:w-32 font-[Daubmark] text-center">
-              Offline
+              Cat Petterz
             </h1>
           </a>
           <a href=".." target="_blank" className={container}>

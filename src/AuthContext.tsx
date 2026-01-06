@@ -1,0 +1,111 @@
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import api from "./api";
+import { jwtDecode } from "jwt-decode";
+import { REFRESH_TOKEN, ACCESS_TOKEN } from "./constants";
+
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// AuthContext.tsx
+
+type DecodedToken = {
+  user_id: number;
+  exp?: number;
+  [key: string]: any;
+};
+
+type AuthProviderProps = {
+  children: ReactNode;
+};
+
+type AuthContextType = {
+  isAuthorized: boolean | undefined;
+  setIsAuthorized: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  setUser: React.Dispatch<React.SetStateAction<number | null>>;
+  user: number | null;
+  auth: () => Promise<void>;
+  logout: () => Promise<void>;
+};
+
+export const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [isAuthorized, setIsAuthorized] = useState<boolean | undefined>(
+    undefined
+  );
+  const [user, setUser] = useState<number | null>(null);
+
+  useEffect(() => {
+    auth().catch(() => setIsAuthorized(false));
+  }, []);
+
+  const refreshToken = async () => {
+    const refresh_token = await localStorage.getItem(REFRESH_TOKEN);
+    try {
+      const response = await api.post("/api/token/refresh/", {
+        refresh: refresh_token,
+      });
+      if (response.status === 200) {
+        await localStorage.setItem(ACCESS_TOKEN, response.data.access);
+        setIsAuthorized(true);
+        console.log(response.data);
+
+        const decoded: DecodedToken = jwtDecode(response.data.access);
+        console.log("REFRESH", decoded);
+        setUser(decoded.user_id);
+      } else setIsAuthorized(false);
+    } catch (error) {
+      console.error(Error);
+      setIsAuthorized(false);
+    }
+  };
+
+  const auth = async () => {
+    const token = await localStorage.getItem(ACCESS_TOKEN);
+    // console.log(token);
+    if (!token) {
+      setIsAuthorized(false);
+      setUser(null);
+      return;
+    }
+    const decoded: DecodedToken = jwtDecode(token);
+    const tokenExp = decoded.exp;
+    const now = Date.now() / 1000;
+    if (tokenExp && tokenExp < now) await refreshToken();
+    else {
+      console.log("AUTH", decoded);
+      setIsAuthorized(true);
+      setUser(decoded.user_id);
+    }
+  };
+
+  if (isAuthorized === undefined) {
+    console.log("Loading...");
+  }
+
+  async function logout() {
+    await localStorage.removeItem(ACCESS_TOKEN);
+    await localStorage.removeItem(REFRESH_TOKEN);
+    setIsAuthorized(false);
+  }
+
+  async function RegisterAndLogOut() {
+    await localStorage.removeItem(ACCESS_TOKEN);
+    await localStorage.removeItem(REFRESH_TOKEN);
+    setIsAuthorized(false);
+  }
+
+  return (
+    <AuthContext.Provider
+      value={{ isAuthorized, setIsAuthorized, user, setUser, auth, logout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext);
