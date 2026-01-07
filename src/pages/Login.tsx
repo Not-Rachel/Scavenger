@@ -11,13 +11,14 @@ function Login() {
   const navigate = useNavigate();
 
   const auth = useAuth();
-  const { setIsAuthorized, setUser } = useAuth();
 
   if (auth === null || auth.isAuthorized === null) {
     return <div>Loading...</div>;
   }
 
-  const [method, setMethod] = useState("login");
+  const { setIsAuthorized, setUser } = auth;
+
+  const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +44,7 @@ function Login() {
       console.log("send");
       const response = await api.post("/api/token/", formData);
       console.log("response");
-      if (response.status == 200 && method === "login") {
+      if (response.status == 200 && isLogin) {
         await localStorage.setItem(ACCESS_TOKEN, response.data.access);
         await localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
         const decoded: any = jwtDecode(response.data.access);
@@ -102,6 +103,16 @@ function Login() {
                 onChange={handleChange}
                 placeholder="PASSWORD"
               />
+              {isLogin && (
+                <input
+                  className="border-white border-2 p-2"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="PASSWORD"
+                />
+              )}
               <input
                 type="submit"
                 value="Submit"
@@ -112,9 +123,9 @@ function Login() {
               name="register"
               type="button"
               className="text-white border-2 broder-blue my-8 p-2 rounded-sm font-bold"
-              onClick={() => console.log("register")}
+              onClick={() => setIsLogin(!isLogin)}
             >
-              Create Account
+              {isLogin ? "Created Account" : "Login"}
             </button>
           </div>
         </section>
