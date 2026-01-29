@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import Page from "./Page";
 import oldParchment from "../assets/old-parchment-center-l.png";
 import oldParchmentRight from "../assets/old-parchment-edge-right.png";
 import oldParchmentLeft from "../assets/old-parchment-edge-left.png";
@@ -10,18 +11,97 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import House from "../assets/home.png";
+// import { round } from "three/src/nodes/TSL.js";
+import NotateText from "./NotateText";
 interface MapProps {
   openMap: boolean;
   clickOpenMap: () => void;
 }
 
-function Map({ openMap, clickOpenMap }: MapProps) {
+interface itemProps {
+  key: number;
+  image: any;
+  name: string;
+  text: string;
+  model: string;
+}
+
+function Map() {
+  const navigate = useNavigate();
+
   const [firstClick, setFirstClick] = useState<boolean>(false);
+  const [animatePath, setAnimatePath] = useState(false);
   const pageRef = useRef(null);
+  const [hovered, setHovered] = useState(false);
+  const campingRef = useRef(null);
+  const homeRef = useRef(null);
+  const [path, setPath] = useState<string | undefined>(undefined);
+  const [cart, setCart] = useState<itemProps[]>([]);
+
+  useEffect(() => {
+    const items = localStorage.getItem("cart");
+    if (items) setCart(JSON.parse(items));
+  }, []);
+
+  // useEffect(() => {
+  //   if (campingRef.current && pageRef.current && homeRef.current) {
+  //     const campingRect = campingRef.current.getBoundingClientRect();
+  //     const pageRect = pageRef.current.getBoundingClientRect();
+  //     const homeRect = homeRef.current.getBoundingClientRect();
+  //     // Position relative to the parchment container
+  //     const relativeHomeX = homeRect.left - pageRect.left;
+  //     const HomeX = homeRect.left;
+  //     const HomeY = homeRect.top;
+  //     const relativeHomeY = homeRect.top - pageRect.top;
+
+  //     const relativeX = campingRect.left - pageRect.left;
+  //     const relativeY = campingRect.top - pageRect.top;
+
+  //     const centerX = relativeX + campingRect.width / 2;
+  //     const centerY = relativeY + campingRect.height / 2;
+
+  //     const pageL = pageRect.left;
+  //     const pageT = pageRect.top;
+
+  //     setPath(`M ${HomeX} ${relativeHomeY} L ${centerX} ${centerY}`);
+  //     console.log("Relative position:", {
+  //       HomeX,
+  //       HomeY,
+  //       relativeHomeX,
+  //       relativeHomeY,
+  //       centerX,
+  //       centerY,
+  //       pageL,
+  //       pageT,
+  //     });
+  //   }
+  // }, []);
 
   function handleMap() {
     clickOpenMap();
     setFirstClick(true);
+  }
+
+  function handleCampingClick() {
+    console.log("Click for animation");
+    setAnimatePath(true);
+    setTimeout(() => setAnimatePath(false), 3000); // Reset after animation
+  }
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const openMap =
+    searchParams.get("view") === "map" || searchParams.get("view") === "cart";
+  function clickOpenMap() {
+    const newParams = new URLSearchParams(location.search);
+    newParams.set("view", openMap ? "" : "map");
+    navigate(`/scavenger?${newParams.toString()}`);
+  }
+  function clickOpenCart() {
+    const newParams = new URLSearchParams(location.search);
+    newParams.set("view", "cart");
+    navigate(`/scavenger?${newParams.toString()}`);
   }
 
   // Source - https://stackoverflow.com/a
@@ -96,15 +176,96 @@ function Map({ openMap, clickOpenMap }: MapProps) {
                 onLoad={onLoad}
                 className="w-full h-[90vh] brightness-70 "
               />
-              <div className="absolute flex flex-row justify-center items-center inset-0 pointer-events-none  ">
-                <div className="w-[45%] z-50 opacity-85  flex-col m-8 px-2  text-orange-950 pointer-events-auto">
-                  <div className="font-[Kashare] lg:text-5xl  sm:text-4xl">
-                    <p>HOME</p>
-                    <a href="/camp">Camping</a>
-                    <a href="/hike">Hiking</a>
-                    <a href="/climb">Climbing</a>
-                    <a href="/fish">Fishing</a>
+              <div className="absolute flex flex-row justify-center items-center inset-0 pointer-events-auto  ">
+                <div className="w-[90%]  z-50 flex-col m-8  text-orange-950 pointer-events-auto h-[90%]">
+                  <div className="absolute pointer-events-none">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="451"
+                      height="437"
+                      className="pointer-events-none"
+                    >
+                      <motion.path
+                        d={path}
+                        fill="transparent"
+                        strokeWidth="2"
+                        stroke="#001017ff"
+                        strokeLinecap={"round"}
+                        strokeDasharray={"10,10"}
+                        initial={{ pathLength: 0 }}
+                        animate={
+                          hovered ? { pathLength: 1 } : { pathLength: 0 }
+                        }
+                        transition={{ duration: 2, ease: "easeInOut" }}
+                      />
+                    </svg>
                   </div>
+                  {searchParams.get("view") !== "cart" ? (
+                    <>
+                      <div
+                        onClick={clickOpenCart}
+                        className="z-50 flex justify-center items-center w-full h-full font-[Kashare] flex-col lg:text-4xl  md:text-3xl text-2xl"
+                      >
+                        <NotateText>Go to Cart</NotateText>
+
+                        <img
+                          ref={homeRef}
+                          src={House}
+                          alt="Home"
+                          className="w-1/20 "
+                        />
+                      </div>
+                      <div className="z-50 font-[Kashare] lg:text-5xl  md:text-4xl text-3xl flex-1 justify-center items-center h-full w-full pointer-events-auto">
+                        {/* <p>HOME</p> */}
+
+                        <div
+                          className="absolute top-1/8 left-1/8 "
+                          onMouseEnter={() => {
+                            setHovered(true);
+                          }}
+                          onMouseLeave={() => {
+                            setHovered(false);
+                          }}
+                          ref={campingRef}
+                        >
+                          <NotateText type="crossed-off">Camping</NotateText>
+                        </div>
+                        <div className="absolute bottom-1/8 left-1/8">
+                          <NotateText type="circle">Hiking</NotateText>
+                        </div>
+                        <div className="absolute top-1/8 right-1/8">
+                          <NotateText type="circle">Climbing</NotateText>
+                        </div>
+                        <div className="absolute bottom-1/8 right-1/8">
+                          <NotateText type="circle">Fishing</NotateText>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex flex-col -space-y-210">
+                      {cart.map((item) => {
+                        const rotate = item.key % 2 === 0 ? 2 : -2;
+                        return (
+                          <div
+                            key={item.key}
+                            style={{ rotate: `${rotate}deg` }}
+                            className="w-2/3"
+                          >
+                            <Page item={item} />
+                          </div>
+                        );
+                      })}
+                      <button
+                        className=" absolute bg-amber-200 rounded-xl right-16 p-4"
+                        onClick={() => {
+                          localStorage.clear();
+                          setCart([]);
+                        }}
+                      >
+                        Clear cart
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>

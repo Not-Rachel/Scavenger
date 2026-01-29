@@ -73,7 +73,6 @@ function Login() {
 
   return (
     <>
-      <TopNav></TopNav>
       <FadeContent
         blur={true}
         duration={300}

@@ -10,10 +10,11 @@ import Scavenger from "./pages/Scavenger";
 import Profile from "./pages/Profile.tsx";
 import Login from "./pages/Login.tsx";
 import AboutUs from "./pages/AboutUs";
-import ClickSpark from "./components/ClickSpark";
 import Game from "./pages/Game";
 import Home from "./landing/Home";
+import HomeAlt from "./landing/HomeAlt.tsx";
 import Cart from "./pages/Cart.tsx";
+import TopNav from "./components/ScavNav";
 // import useAuth from "./AuthContext.tsx";
 function App() {
   // const navigate = useNavigate();
@@ -25,25 +26,18 @@ function App() {
   return (
     <>
       <div className="bg-black">
-        <ClickSpark
-          sparkColor="#fff"
-          sparkSize={10}
-          sparkRadius={15}
-          sparkCount={8}
-          duration={400}
-        >
-          <Router>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/scavenger" element={<Scavenger />} />
-              <Route path="/scavenger/login" element={<Login />} />
-              <Route path="/scavenger/about" element={<AboutUs />} />
-              <Route path="/scavenger/profile" element={<Profile />} />
-              <Route path="/scavenger/cart" element={<Cart />} />
-              <Route path="/game" element={<Game />} />
-            </Routes>
-          </Router>
-        </ClickSpark>
+        <Router>
+          {/* <TopNav /> */}
+          <Routes>
+            <Route path="/" element={<HomeAlt />} />
+            <Route path="/scavenger" element={<Scavenger />} />
+            <Route path="/scavenger/login" element={<Login />} />
+            <Route path="/scavenger/about" element={<AboutUs />} />
+            <Route path="/scavenger/profile" element={<Profile />} />
+            <Route path="/scavenger/cart" element={<Cart />} />
+            <Route path="/game" element={<Game />} />
+          </Routes>
+        </Router>
       </div>
     </>
   );

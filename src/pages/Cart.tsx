@@ -1,3 +1,8 @@
+import TopNav from "../components/ScavNav";
+
 export default function Cart() {
-  return <div>Cart before the horse</div>;
+  return (
+    <>
+    </>
+  );
 }

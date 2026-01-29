@@ -22,7 +22,7 @@ function TopNav() {
 
   return (
     <>
-      <Navbar className=" font-[revolution] text-3xl w-full z-99 bg-gradient-to-b from-black via-black/90 to-red-500/0 p-2 flex sticky flex-row text-amber-100  top-0 justify-between ">
+      <Navbar className=" font-[revolution] text-3xl w-full z-99 bg-gradient-to-b from-black via-black/90 to-red-500/0 p-2 flex absolute flex-row text-amber-100  top-0 justify-between ">
         <div className="flex-row flex items-center text-center gap-8 mx-8  ">
           <Container onClick={() => navigate("/scavenger")}>
             <NotateText>HOME</NotateText>
@@ -33,7 +33,13 @@ function TopNav() {
           >
             <NotateText>INFO</NotateText>
           </Container>
-          {auth.isAuthorized ? (
+          <Container
+            className="whitespace-nowrap w-fit"
+            onClick={() => navigate("/scavenger/cart")}
+          >
+            <NotateText>CART</NotateText>
+          </Container>
+          {/* {auth.isAuthorized ? (
             <Container onClick={() => navigate("/scavenger/profile")}>
               <NotateText>Profile</NotateText>
             </Container>
@@ -41,7 +47,7 @@ function TopNav() {
             <Container onClick={() => navigate("/scavenger/login")}>
               <NotateText>LOGIN</NotateText>
             </Container>
-          )}
+          )} */}
         </div>
 
         <a href="https://preydrivedesign.crd.co/" target="_blank">

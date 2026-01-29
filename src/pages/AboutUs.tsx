@@ -4,7 +4,6 @@ import TopNav from "../components/ScavNav";
 function AboutUs() {
   return (
     <>
-      <TopNav></TopNav>
       <FadeContent
         blur={true}
         duration={300}

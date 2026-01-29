@@ -23,17 +23,16 @@ function Home() {
         <div className="w-full  flex flex-row justify-center  ">
           <div className=" pt-16 ">
             <h1 className="text-nowrap pb-16">Rachel Brinkman</h1>
-            <p className="text-2xl">I love to design creative websites</p>
             <p className="text-2xl">
               {" "}
               Please check out any of the projects below
             </p>
           </div>
-          <img
+          {/* <img
             src={portrait}
             alt="Portrait"
             className="w-64 h-auto object-cover"
-          />
+          /> */}
         </div>
         <h3 className="mt-8 w-full">Projects</h3>
         <div className="w-full grid grid-cols-3 gap-12 my-8">
@@ -57,17 +56,17 @@ function Home() {
           </a>
           <a href=".." target="_blank" className={container}>
             <h1 className="text-amber-50 text-3xl  w-24 md:w-32 font-[Daubmark] text-center">
-              Watch for Deer
+              ---
             </h1>
           </a>
           <a href=".." target="_blank" className={container}>
             <h1 className="text-amber-50 text-3xl  w-24 md:w-32 font-[Daubmark] text-center">
-              Cat Petterz
+              ---
             </h1>
           </a>
           <a href=".." target="_blank" className={container}>
             <h1 className="text-amber-50 text-xl  w-24 md:w-32 font-[EdSloppy] text-center">
-              Dither Punk
+              ---
             </h1>
           </a>
 

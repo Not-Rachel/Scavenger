@@ -16,7 +16,6 @@ const Profile = () => {
   }
   return (
     <div>
-      <ScavNav></ScavNav>
       <div>Profile</div>
       <button
         onClick={() => {

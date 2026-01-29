@@ -1,10 +1,11 @@
 import { useState, type ReactNode } from "react";
-import { RoughNotation } from "react-rough-notation";
+import { RoughNotation, type types } from "react-rough-notation";
 interface NotateTextProps {
   children: ReactNode;
+  type?: types;
 }
 
-function NotateText({ children }: NotateTextProps) {
+function NotateText({ children, type = "underline" }: NotateTextProps) {
   const [isHovering, setIsHovering] = useState(false);
 
   return (
@@ -15,7 +16,7 @@ function NotateText({ children }: NotateTextProps) {
     >
       <div className="-rotate-5">
         <RoughNotation
-          type="underline"
+          type={type}
           show={isHovering}
           strokeWidth={2}
           iterations={3}
